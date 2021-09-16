@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //等待事情處完，用來處理非同步的狀態，EX:ajax,fetch,讀取檔案之類的
+        //不能直接用try catch 處理錯誤，try catch 只能處理同步狀況的錯誤
+        new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve('abc');
+                //reject('my-error');
+            },1000);
+        }).then(r=>{
+            console.log('2:',r,new Date());
+            throw new Error('error2')//自訂丟出錯誤的物件
+        }).catch(err=>{
+            console.log('error',err);//會catch錯誤，呈現黑字狀態，不會將錯誤往外丟
+        })
+
+        console.log('1:',new Date());
+    </script>
+</body>
+</html>

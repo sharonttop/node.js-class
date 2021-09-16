@@ -1,0 +1,44 @@
+
+{
+    "fieldname": "avatar",
+    "originalname": "0_1024.jpg",
+    "encoding": "7bit",
+    "mimetype": "image/jpeg",
+    "destination": "C:\\Users\\庭瑄\\Desktop\\mfee19-node\\modules/../public/img",
+    "filename": "c41c606a-cc0d-421b-8fb2-51770c03c088.jpg",
+    "path": "C:\\Users\\庭瑄\\Desktop\\mfee19-node\\public\\img\\c41c606a-cc0d-421b-8fb2-51770c03c088.jpg",
+    "size": 27491
+}
+
+[
+    {
+        "fieldname": "photo",
+        "originalname": "20h51md.jpg",
+        "encoding": "7bit",
+        "mimetype": "image/jpeg",
+        "destination": "C:\\Users\\庭瑄\\Desktop\\mfee19-node\\modules/../public/img",
+        "filename": "8a8fe607-89ed-4280-ba5a-952450994d09.jpg",
+        "path": "C:\\Users\\庭瑄\\Desktop\\mfee19-node\\public\\img\\8a8fe607-89ed-4280-ba5a-952450994d09.jpg",
+        "size": 92325
+    },
+    {
+        "fieldname": "photo",
+        "originalname": "26.jpg",
+        "encoding": "7bit",
+        "mimetype": "image/jpeg",
+        "destination": "C:\\Users\\庭瑄\\Desktop\\mfee19-node\\modules/../public/img",
+        "filename": "08fcfbda-bf9e-42a8-af3a-bd541ecb6a0c.jpg",
+        "path": "C:\\Users\\庭瑄\\Desktop\\mfee19-node\\public\\img\\08fcfbda-bf9e-42a8-af3a-bd541ecb6a0c.jpg",
+        "size": 176863
+    },
+    {
+        "fieldname": "photo",
+        "originalname": "64e2027739a3d075959471d0e82249ec.jpg",
+        "encoding": "7bit",
+        "mimetype": "image/jpeg",
+        "destination": "C:\\Users\\庭瑄\\Desktop\\mfee19-node\\modules/../public/img",
+        "filename": "4e198fb3-9653-4a43-a1dd-b951fee12c57.jpg",
+        "path": "C:\\Users\\庭瑄\\Desktop\\mfee19-node\\public\\img\\4e198fb3-9653-4a43-a1dd-b951fee12c57.jpg",
+        "size": 20885
+    }
+]

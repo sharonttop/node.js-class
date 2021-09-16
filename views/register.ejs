@@ -1,0 +1,105 @@
+<%- include('parts/html-head') %>
+<%- include('parts/navbar') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" >
+                <div class="card-body">
+                    <h5 class="card-title">會員註冊</h5>
+
+                    <form name="form1" onsubmit="checkForm(); return false;">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">email (作為帳號使用)</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密碼 </label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label for="password-check" class="form-label">密碼確認 </label>
+                            <input type="password-check" class="form-control" id="password-check" name="password-check">
+                        </div> -->
+                        <!-- <div class="mb-3">
+                            <label for="name" class="form-label">name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div> -->
+                        <div class="mb-3">
+                            <label for="nickname" class="form-label">nickname</label>
+                            <input type="text" class="form-control" id="nickname" name="nickname" >
+                        </div>
+
+                        
+
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">mobile</label>
+                            <input type="text" class="form-control" id="mobile" name="mobile">
+                        </div>
+                        <div class="mb-3">
+                            <label for="birthday" class="form-label">birthday</label>
+                            <input type="date" class="form-control" id="birthday" name="birthday">
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label for="address" class="form-label">address</label>
+                            <textarea class="form-control" name="address" id="address"
+                                      cols="30" rows="3"></textarea>
+                        </div> -->
+                        <button type="submit" class="btn btn-primary">註冊</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<%- include('parts/scripts') %>
+<script>
+    const email = document.querySelector("#email");
+    const keyHandler = event=> {
+        // console.log(event.type,event.key);
+        //檢查格式是否符合email格式
+        const usp = new URLSearchParams();
+        usp.set('email',email.value.toLowerCase().trim());
+
+        fetch('/account-check?' + usp).then(r=>r.json()).then(data=>{
+            if(data.used){
+                //email已被使用，因為會一直發送很吃效能，可以設定跳出提示，或是把按鈕隱藏
+                email.style.border = '2px solid red';
+                
+            }else{
+                email.style.border = '2px solid #CCCCCC';
+            }
+        });
+    }
+
+    // email.addEventListener('keypress',keyHandler);//輸入時會抓輸入字，但刪除時不會觸發
+    email.addEventListener('input',keyHandler);
+
+
+    function checkForm(){
+        // TODO: 欄位檢查
+        const fd = new FormData(document.form1);
+
+        // 以 urlencoded 的格式送出
+        fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(fd).toString(),
+        }).then(r=>r.json()).then(obj=>{
+            console.log(JSON.stringify(obj, null, 4));
+            if(obj.success){
+                alert('註冊成功')
+                location.href ='/login';
+            } else {
+                alert('註冊失敗\n' + (obj.error || ''));
+            }
+        });
+
+    }
+
+
+</script>
+<%- include('parts/html-foot') %>

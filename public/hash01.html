@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            height: 800px;
+            width: 300px;
+            background-color: #afa;
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id="id">
+        <a href="#b2">b2</a><a href="#b3">b3</a>
+    </div>
+    <div class="box" id="b1">1</div>
+    <div class="box" id="b2" style="background-color:#faf">2</div>
+    <div class="box" id="b3" style="background-color:#aaf">3</div>
+<script>
+    const whenHashChange = () =>{
+        console.log(location.hash);
+        // 會記錄在history裡面，可以記錄用戶前一個頁面，缺點是只能放一個字串。前後頁可以簡單的下#+頁碼就好。
+    };
+    window.addEventListener('hashchange',whenHashChange);
+    whenHashChange();
+</script>
+</body>
+</html>

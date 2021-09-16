@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            height: 800px;
+            width: 300px;
+            background-color: #afa;
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <a href="javascript: pushS('/b1')">b1</a>
+        <a href="javascript: pushS('/b2')">b2</a>
+        <a href="javascript: pushS('/b3')">b3</a>
+    </div>
+<script>
+    const pushS = (url) =>{
+        history.pushState({t: Date.now(),url},'',url)
+        //Date.now() 方法回傳自 1970/01/01 00:00:00 UTC 起經過的毫秒數。
+        // 語法: history.pushState(state, title [, url])
+        // 當點擊內容時會增加url的資料，但不會刷新頁面，若案重新整理由於後端連線沒有給頁面，會找不到資料，此方法是必須核後端配合的方式。
+        //pushState可以直接放Obj
+        // history.pushState({},'','/test123')
+    }
+
+    window.addEventListener('popstate',event=>{
+        console.log(event.state);
+    });
+
+</script>
+</body>
+</html>

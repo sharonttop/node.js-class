@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function myPromise(p){
+            return new Promise((resolve, reject)=>{
+            const rnd=300 + Math.floor(Math.random()*1000);
+            setTimeout(()=>{
+                resolve({p,rnd});
+            },rnd);
+        });
+    }
+
+//下了async可以讓內部順序由上而下按順序跑，但當執行兩個async時，async並不是一個跑完才跑下一個，而是兩方同時個別按內部順序跑，執行結果交錯出現。
+
+    (async ()=>{
+        const str = 'say-hello----';
+
+        for(let i=0; i<str.length; i++){
+            console.log(await myPromise(str[i]));
+
+        }
+
+       
+    })();
+
+ 
+
+    (async ()=>{
+        //async雖然看起來像同步，但其實頂層是非同步的，使用await內部會按照順序執行
+        //2021 09 08 10 16 00 00:20:00
+        const r1 = await myPromise('bill');
+        console.log(r1);
+        const r2 = await myPromise('peter');
+        console.log(r2);
+        const r3 = await myPromise('arron');
+        console.log(r3);
+        const r4 = await myPromise('david');
+        console.log(r4);
+    })();
+
+    </script>
+</body>
+</html>

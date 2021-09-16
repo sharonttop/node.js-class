@@ -1,0 +1,43 @@
+<%- include('parts/html-head') %>
+<%- include('parts/navbar') %>
+<!-- ../往上移一層 -->
+
+<div class="container">
+  <% if(locals.flashMsg){ %> 
+    <div class="alert alert-danger" role="alert">
+      <%= flashMsg %> 
+    </div>
+  <% } %> 
+
+  <div class="col-md-6 mt-4">
+      <div class="card">
+          <div class="card-body">
+            <% if(locals.isLogined){ %>
+                <div class="alert alert-primary" role="alert">
+                  <%= loginUser %>您好 
+                  <h5 href="/logout" class="card-title">登出</h5>
+                </div>
+              <% } else { %> 
+                <form method="post">
+                    <div class="form-group">
+                        <label for="user">帳號</label>
+                        <input type="text" class="form-control" id="account" placeholder="Enter email" name="user">
+                        <small class="form-text">請填寫帳號</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密碼</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+                        <small class="form-text">請填寫密碼</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">登入</button>
+                </form>
+              <% } %>  
+          </div>
+      </div>
+
+  </div>
+
+</div>
+
+<%- include('parts/scripts') %>
+<%- include('parts/html-foot') %>

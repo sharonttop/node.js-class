@@ -1,0 +1,89 @@
+
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="//localhost:3001/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//localhost:3001/fontawesome/css/all.css">
+    <title>小新的網站</title>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    </nav>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" >
+                <div class="card-body">
+                    <h5 class="card-title">登入(JWT)</h5>
+
+                    <form name="form1" onsubmit="checkForm(); return false;">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">email (作為帳號使用)</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密碼 </label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">登入</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="//localhost:3001/jquery/jquery.min.js"></script>
+<script src="//localhost:3001/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    const email = document.querySelector("#email");
+    const keyHandler = event=> {
+        // console.log(event.type,event.key);
+        //檢查格式是否符合email格式
+        const usp = new URLSearchParams();
+        usp.set('email',email.value.toLowerCase().trim());
+
+    }
+
+    // email.addEventListener('keypress',keyHandler);//輸入時會抓輸入字，但刪除時不會觸發
+    email.addEventListener('input',keyHandler);
+
+
+    function checkForm(){
+        // TODO: 欄位檢查
+        const fd = new FormData(document.form1);
+
+        // 以 urlencoded 的格式送出
+        fetch('/login-jwt', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(fd).toString(),
+        }).then(r=>r.json()).then(obj=>{
+            console.log(JSON.stringify(obj, null, 4));
+            if(obj.success){
+                localStorage.setItem('member',JSON.stringify(obj.member));
+                localStorage.setItem('token',obj.token);//儲存到localStorage
+                
+                alert('登入成功');
+            } else {
+                alert('登入錯誤\n' + (obj.error || ''));
+            }
+        });
+
+    }
+
+
+</script>
+</body>
+</html>

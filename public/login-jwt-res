@@ -1,0 +1,10 @@
+加密成功會回傳
+
+{
+    "success": true,
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMsImVtYWlsIjoiMTIzMTJAZ21haWwuY29tIiwibmlja25hbWUiOiLlj4nnh5Lnh5IiLCJpYXQiOjE2MzE2ODc1MDV9.xnhZzky3E-twEoABOfMrp6xiyD-eon4MWutihbDSRaM"
+}
+
+客戶端請求中帶入 JWT
+JWT 是一種 Bearer Token，因此在Authorization帶入：
+Authorization: 'Bearer ' + token

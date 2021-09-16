@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<body>
+    <button id="btn" onclick="getData()">get data</button>
+    <br>
+    <textarea name="" id="ta" cols="80" rows="10"></textarea>
+
+<script>
+    function getData() {
+        fetch('http://localhost:3001/try-sess', {
+            credentials: "include"
+            //設定在cookie發req時送出去，除了設定include以外由於cookie不接受Access-Control-Allow-Origin: *的設定，因此要額外設定corsOptions才能抓到。Access-Control-Allow-Credentials: true才會由live server開啟時抓取，
+        })
+            .then(r=>r.json())
+            .then(data=>{
+                document.querySelector('#ta').value = JSON.stringify(data, null, 4);
+            });
+    }
+
+</script>
+</body>
+</html>

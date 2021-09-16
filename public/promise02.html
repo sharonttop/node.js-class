@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+
+        new Promise((resolve, reject)=>{
+            const rnd=300+Math.floor(Math.random()*1000);
+            setTimeout(()=>{
+                resolve(rnd);
+            },rnd);
+        }).then(r=>{
+            console.log('2:',r);
+            return new Promise((resolve, reject)=>{
+            const rnd=300 + Math.floor(Math.random()*1000);
+            setTimeout(()=>{
+                resolve(rnd);
+            },rnd);
+        })
+            //處理完會進到下一個then
+            //return 100;//如果有return值就會進到下一個then，如果沒有就是undefine
+        }).then(r=>{
+            console.log('3:',r);
+        }).catch(err=>{
+            console.log('error',err);
+        })
+
+    </script>
+</body>
+</html>

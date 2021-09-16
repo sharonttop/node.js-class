@@ -1,0 +1,8 @@
+GET  http://localhost:3001/try-qs?a=3&b=3
+
+###
+POST http://localhost:3001/try-post
+Content-Type: application/json
+
+{"name":"sharon","gender":"male"}
+

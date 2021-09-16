@@ -1,0 +1,98 @@
+<%- include('../parts/html-head') %>
+<%- include('../parts/navbar') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" >
+                <div class="card-body">
+                    <h5 class="card-title">新增客戶資料</h5>
+
+                    <form name="form1" onsubmit="checkForm(); return false;">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">mobile</label>
+                            <input type="text" class="form-control" id="mobile" name="mobile">
+                        </div>
+                        <div class="mb-3">
+                            <label for="birthday" class="form-label">birthday</label>
+                            <input type="date" class="form-control" id="birthday" name="birthday">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">address</label>
+                            <textarea class="form-control" name="address" id="address"
+                                      cols="30" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">新增</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<%- include('../parts/scripts') %>
+<script>
+
+
+    function checkForm(){
+        // TODO: 欄位檢查
+
+
+        const fd = new FormData(document.form1);
+        // const usp = new URLSearchParams(new FormData(document.form1));
+        // console.log(usp.toString());
+
+        // 自動以 multipart/form-data 的格式送出，不用再自己設定Content-Type。
+        // fetch('', {
+        //     method: 'POST',
+        //     body: fd
+        // }).then(r=>r.json())
+        //     .then(obj=>{
+        //     console.log(obj);
+        //     console.log(obj.success);
+        //     console.log(JSON.stringify(obj, null, 4));
+        //     if(obj.success){
+        //         location.href ='/customers/list';
+        //     } else {
+        //         alert('資料無法新增成功\n' + (obj.error || ''));
+        //     }
+        // });
+
+
+        // 以 urlencoded 的格式送出
+        fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(fd).toString(),
+        }).then(r=>r.json()).then(obj=>{
+            console.log(obj);
+            console.log(JSON.stringify(obj, null, 4));
+            if(obj.success){
+                location.href ='/customers/list';
+            } else {
+                alert('資料無法新增成功\n' + (obj.error || ''));
+            }
+        });
+
+        /*
+        // 以 urlencoded 的格式送出，用jQuery。
+        $.post('', $(document.form1).serialize(), function(data){
+            // console.log(data
+        }, 'json');
+         */
+    }
+
+
+</script>
+<%- include('../parts/html-foot') %>
