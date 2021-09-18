@@ -109,7 +109,7 @@ router.post('/login-jwt', async (req, res)=>{
         // req.session.member = {id, email, nickname};
 
         output.success = true;
-        output.member = {id, email, nickname};
+        output.member = {id, email, nickname};//為了方便也可加這行2021 09 15 14 36 28 00:19:59
         output.token = await jwt.sign({id, email, nickname}, process.env.JWT_SECRET);//和上面login差別在會產生jwt送給用戶端
     }
     res.json(output);

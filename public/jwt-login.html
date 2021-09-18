@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="//localhost:3001/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="//localhost:3001/fontawesome/css/all.css">
+    <!-- href="http://localhost:3001/fontawesome/css/all.css" -->
+    <!-- 寫法差別在有無指定協定，若沒寫表示會依照此檔案原生的改變 -->
     <title>小新的網站</title>
 </head>
 <body>
@@ -62,7 +64,8 @@
         // TODO: 欄位檢查
         const fd = new FormData(document.form1);
 
-        // 以 urlencoded 的格式送出
+        //此檔為模擬前後端分離的狀態，為了不要和其他ejs做連結，才寫成html 2021 09 15 14 36 28 00:16:14
+        //2021 09 15 14 36 28 00:27:57
         fetch('/login-jwt', {
             method: 'POST',
             headers: {
@@ -72,7 +75,7 @@
         }).then(r=>r.json()).then(obj=>{
             console.log(JSON.stringify(obj, null, 4));
             if(obj.success){
-                localStorage.setItem('member',JSON.stringify(obj.member));
+                localStorage.setItem('member',JSON.stringify(obj.member));//將顧客資料基本資料從前端存到localStorage，注意不要存放敏感性資料，譬如身分證手機等等
                 localStorage.setItem('token',obj.token);//儲存到localStorage
                 
                 alert('登入成功');
