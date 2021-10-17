@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //10/14 00:04:00
+        //像設計藍圖
+        class Person{
+            constructor(name,age){
+                //沒有宣告屬於個體的方法，不能宣告靜態變數:static let=
+                this.name=name;
+                this.age=age;
+                Person.num= Person.num||0;//相當於變數
+                Person.num++;
+            }
+            toTSON(){
+                //沒有宣告屬於個體的方法
+                return{
+                    name:this.name,
+                    age:this.age,
+                }
+            }
+            static count(){
+                //static只能用在class的定義
+                return Person.num;//因此可以直接呼叫
+            }
+        }
+        const p1 = new Person('bill',23);
+        console.log(Person.count())
+
+        const p2 = new Person('david',20);
+        console.log(Person.count())
+    </script>
+</body>
+</html>

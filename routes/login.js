@@ -46,6 +46,7 @@ router.post('/register', async (req, res)=>{
         error: ''
     };
     // TODO: 欄位檢查
+    
 
     const hash = await bcrypt.hash(req.body.password, 10);
 

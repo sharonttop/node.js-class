@@ -181,7 +181,8 @@ app.use('/', require('./routes/login'));
 
 app.use('/admin3', require('./routes/admin3'));//一定要符合/admin3才會進到routes，當更新版本要換路徑時直接修改會比較方便，
 app.use('/customers', require('./routes/customers'));
-
+app.use('/product', require('./routes/product'));
+app.use('/cart', require('./routes/cart'));
 
 
 
@@ -211,6 +212,25 @@ app.get('/try-db', async (req, res)=>{
     res.json(r);
 
 });
+/*
+app.post('/test_avatar', async (req, res)=>{
+    //若使用FormData要使用 uoload.none(), # multer 的功能如下
+    //app.post('/test_avatar', uploadImg.none(), async (req, res)=>{
+    // res.json(req.body);用於測試
+    const sql = "INSERT INTO `test_avatar`(`avatar`, `name`) VALUES (?, ?)";
+    const [r] = await db.query(sql, [req.body.avatar, req.body.name]);
+    res.json(r);
+});
+*/
+app.post('/test_avatar', async (req, res)=>{
+    //若使用FormData要使用 uoload.none(), # multer 的功能如下
+    //app.post('/test_avatar', uploadImg.none(), async (req, res)=>{
+    // res.json(req.body);用於測試
+    const sql = "INSERT INTO `test_avatar`(`avatar`, `name`) VALUES (?, ?)";
+    const [r] = await db.query(sql, [req.body.avatar, req.body.name]);
+    res.json(r);
+});
+
 
 // *** 路由定義結束 :END
 
