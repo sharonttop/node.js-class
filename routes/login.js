@@ -50,19 +50,24 @@ router.post('/register', async (req, res)=>{
 
     const hash = await bcrypt.hash(req.body.password, 10);
 
-    const sql = "INSERT INTO `members`" +
-        "(`email`, `password`, `mobile`, `birthday`, `nickname`, `create_at`)" +
-        " VALUES (?, ?, ?, ?, ?, NOW())";
+    //SELECT `id`, `avatar`, `name`, `nickname`, `email`, `password`, `mobile`, `birthday`, `address`, `hash`, `activated`, `create_at`, `coupon_signup`(註冊預設空值，設定為datetime), `coupon_petid`(註冊呈現空值，登入寵物id時給一個日期), FROM `members` WHERE 1
+
+    const sql = "INSERT INTO `members`"+
+    "(`avatar`, `name`, `nickname`, `email`, `password`, `mobile`, `birthday`, `address`,`create_at`)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
     let result;//在外面使用時，一定要加
     try {
         [result] = await db.query(sql, [
+            req.body.avatar,
+            req.body.name,
+            req.body.nickname,
             req.body.email.toLowerCase().trim(),//Email不區分大小寫。//9/15 01:11:00
             hash,// 注意hash加密
             req.body.mobile,
             req.body.birthday,
-            req.body.nickname,
+            req.body.address,
         ]);
+
         if(result.affectedRows===1){
             output.success = true;
         } else {
@@ -101,17 +106,18 @@ router.post('/login-jwt', async (req, res)=>{
 
     if(!rs.length){
         // 帳號錯誤
-        return res.json(output);
+        return res.json({success: false});
     }
 
     const success = await bcrypt.compare(req.body.password, rs[0].password);
     if(success){
         const {id, email, nickname} = rs[0];
-        // req.session.member = {id, email, nickname};
 
         output.success = true;
-        output.member = {id, email, nickname};//為了方便也可加這行2021 09 15 14 36 28 00:19:59
-        output.token = await jwt.sign({id, email, nickname}, process.env.JWT_SECRET);//和上面login差別在會產生jwt送給用戶端
+        output.member = {id, email, nickname};
+        output.token = await jwt.sign({id, email, nickname}, process.env.JWT_SECRET);
+
+        req.session.member = {id, email, nickname};//session裡面
     }
     res.json(output);
 });

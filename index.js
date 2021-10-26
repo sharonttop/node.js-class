@@ -18,6 +18,7 @@ const moment = require("moment-timezone")
 const db = require('./modules/connect-mysql');
 const sessionStore= new MysqlStore({},db);
 
+const bcrypt = require('bcryptjs');
 const app = express();
 
 app.set('view engine','ejs');
@@ -212,7 +213,7 @@ app.get('/try-db', async (req, res)=>{
     res.json(r);
 
 });
-/*
+
 app.post('/test_avatar', async (req, res)=>{
     //若使用FormData要使用 uoload.none(), # multer 的功能如下
     //app.post('/test_avatar', uploadImg.none(), async (req, res)=>{
@@ -221,13 +222,63 @@ app.post('/test_avatar', async (req, res)=>{
     const [r] = await db.query(sql, [req.body.avatar, req.body.name]);
     res.json(r);
 });
-*/
-app.post('/test_avatar', async (req, res)=>{
-    //若使用FormData要使用 uoload.none(), # multer 的功能如下
-    //app.post('/test_avatar', uploadImg.none(), async (req, res)=>{
-    // res.json(req.body);用於測試
-    const sql = "INSERT INTO `test_avatar`(`avatar`, `name`) VALUES (?, ?)";
-    const [r] = await db.query(sql, [req.body.avatar, req.body.name]);
+
+app.get('/test_avatar/:id', async (req, res)=>{
+    const sql = "SELECT * FROM `test_avatar` WHERE sid=?";
+    const [r] = await db.query(sql, [req.params.id]);
+    res.json(r[0] ? r[0] : {});
+});
+app.put('/test_avatar/:id', async (req, res)=>{
+    const sql = "UPDATE `test_avatar` SET ? WHERE sid=?";
+    const [r] = await db.query(sql, [req.body, req.params.id]);
+    res.json(r);
+});
+
+
+app.post('/sign-up', async (req, res)=>{
+    const hash = await bcrypt.hash(req.body.password, 10);
+    console.log(hash);
+    // return res.json(req.body);
+
+    // res.json(req.body);
+   const sql = "INSERT INTO `members`(`avatar`, `name`, `nickname`, `email`, `password`, `mobile`, `birthday`, `address`,`create_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+    //SELECT `id`, `avatar`, `name`, `nickname`, `email`, `password`, `mobile`, `birthday`, `address`, `hash`, `activated`, `create_at`, `coupon_signup`(註冊預設空值，設定為datetime), `coupon_petid`(註冊呈現空值，登入寵物id時給一個日期), FROM `members` WHERE 1
+
+    const [r] = await db.query(sql, [
+        req.body.avatar,
+        req.body.name,
+        req.body.nickname,
+        req.body.email.toLowerCase().trim(),
+        hash,// 注意hash加密
+        req.body.mobile,
+        req.body.birthday,
+        req.body.address,
+    ]);
+    res.json(r);
+});
+
+app.get('/sign-up/:id', async (req, res)=>{
+    // res.json(req.body);
+   
+
+    //SELECT `id`, `avatar`, `name`, `nickname`, `email`, `password`, `mobile`, `birthday`, `address`, `hash`, `activated`, `create_at`, `coupon_signup`(註冊預設空值，設定為datetime), `coupon_petid`(註冊呈現空值，登入寵物id時給一個日期), FROM `members` WHERE 1
+    const sql = "SELECT * FROM `members` WHERE id=?";
+    const [r] = await db.query(sql, [req.params.id]);
+    res.json(r[0] ? r[0] : {});
+});
+
+
+app.put('/sign-up/:id', async (req, res)=>{
+    // const hash = await bcrypt.hash(req.body.password, 10);
+    // console.log(hash);
+    // return res.json(req.body);
+
+    // res.json(req.body);
+   const sql = "UPDATE `members` SET ? WHERE id=?";
+
+    //SELECT `id`, `avatar`, `name`, `nickname`, `email`, `password`, `mobile`, `birthday`, `address`, `hash`, `activated`, `create_at`, `coupon_signup`(註冊預設空值，設定為datetime), `coupon_petid`(註冊呈現空值，登入寵物id時給一個日期), FROM `members` WHERE 1
+    const [r] = await db.query(sql, [req.body,req.params.id]);
     res.json(r);
 });
 
