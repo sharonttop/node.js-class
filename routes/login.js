@@ -139,15 +139,107 @@ router.get('/get-data-jwt',async (req, res)=>{
     //     output.error = 'token 錯誤'
     // }
 
+    //未更改10/28以前原來的範例
     // 判斷有沒有通過 jwt 驗證  2021 09 15 15 50 29 00:40:48
+    // if(req.myAuth && req.myAuth.id){
+    //     output.member = req.myAuth;
+    //     output.success = true;
+    //     output.data = await getListData(req, res);
+    // } else {
+    //     output.error = '沒有 token 或者 token 不合法';
+    // }
+    //----------
+    
     if(req.myAuth && req.myAuth.id){
         output.member = req.myAuth;
         output.success = true;
-        output.data = await getListData(req, res);
+
     } else {
         output.error = '沒有 token 或者 token 不合法';
     }
     
     res.json(output);
 });
+//變更密碼-----------------------
+router.get('/password-change', async (req, res)=>{
+    const output = {
+        success: false,
+        postData: req.body,
+        error: ''
+    };
+    //檢查有無登入
+    if(req.myAuth && req.myAuth.id){
+        output.member = req.myAuth;
+        output.success = true;
+        // output.member = {id, email, nickname};
+
+    } else {
+        output.error = '沒有 token 或者 token 不合法';
+    }
+
+    const sql = "SELECT * FROM `members` WHERE id=?";
+    const [r] = await db.query(sql, [req.myAuth.id]);
+    res.json(r[0] ? r[0] : {});
+   
+    //驗證舊密碼
+    const success = await bcrypt.compare(req.myAuth.password, r[0].password);
+    if(success){
+        // const {id, email, nickname} = rs[0];
+
+        output.success = true;
+        output.member = {id, email, nickname};
+        output.token = await jwt.sign({id, email, nickname}, process.env.JWT_SECRET);
+
+    }else {
+        output.error = '密碼錯誤';
+    }
+
+    res.json(output);
+});
+
+router.put('/password-change', async (req, res)=>{
+    const output = {
+        success: false,
+        postData: req.body,
+        error: ''
+    };
+    //檢查有無登入
+    if(req.myAuth && req.myAuth.id){
+        output.member = req.myAuth;
+        output.success = true;
+        output.member = {id, email, nickname};
+
+    } else {
+        output.error = '沒有 token 或者 token 不合法';
+    }
+
+
+    //驗證舊密碼
+    
+
+    //新增密碼----------
+    const hash = await bcrypt.hash(req.body.newpassword, 10);
+
+    const sql = "UPDATE `members`"+
+    "(`password`,`create_at`)" + "VALUES (?, NOW())";
+
+    let result;//在外面使用時，一定要加
+    try {
+        [result] = await db.query(sql, [
+            hash,// 注意hash加密
+        ]);
+
+        if(result.affectedRows===1){
+            output.success = true;
+        } else {
+            output.error = '密碼變更失敗';
+        }
+    } catch(ex){
+        console.log(ex);
+        output.error = '';
+    }
+
+    res.json(output);
+});
+
 module.exports = router;

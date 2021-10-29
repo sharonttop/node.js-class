@@ -258,29 +258,52 @@ app.post('/sign-up', async (req, res)=>{
     res.json(r);
 });
 
-app.get('/sign-up/:id', async (req, res)=>{
+//抓取會員資料會用到自訂的屬性 myAuth(上面要注意複製)
+app.get('/auth-token', async (req, res)=>{
     // res.json(req.body);
-   
+    const output = {
+        success: false,
+        postData: req.body,
+        error: ''
+    };
+
+    if(req.myAuth && req.myAuth.id){
+        output.member = req.myAuth;
+        output.success = true;
+
+    } else {
+        output.error = '沒有 token 或者 token 不合法';
+    }
 
     //SELECT `id`, `avatar`, `name`, `nickname`, `email`, `password`, `mobile`, `birthday`, `address`, `hash`, `activated`, `create_at`, `coupon_signup`(註冊預設空值，設定為datetime), `coupon_petid`(註冊呈現空值，登入寵物id時給一個日期), FROM `members` WHERE 1
     const sql = "SELECT * FROM `members` WHERE id=?";
-    const [r] = await db.query(sql, [req.params.id]);
+    const [r] = await db.query(sql, [req.myAuth.id]);
     res.json(r[0] ? r[0] : {});
 });
 
-
-app.put('/sign-up/:id', async (req, res)=>{
-    // const hash = await bcrypt.hash(req.body.password, 10);
-    // console.log(hash);
-    // return res.json(req.body);
-
+//編輯會員資料
+app.put('/auth-token', async (req, res)=>{
     // res.json(req.body);
-   const sql = "UPDATE `members` SET ? WHERE id=?";
+    const output = {
+        success: false,
+        postData: req.body,
+        error: ''
+    };
 
-    //SELECT `id`, `avatar`, `name`, `nickname`, `email`, `password`, `mobile`, `birthday`, `address`, `hash`, `activated`, `create_at`, `coupon_signup`(註冊預設空值，設定為datetime), `coupon_petid`(註冊呈現空值，登入寵物id時給一個日期), FROM `members` WHERE 1
-    const [r] = await db.query(sql, [req.body,req.params.id]);
+    if(req.myAuth && req.myAuth.id){
+        output.member = req.myAuth;
+        output.success = true;
+
+    } else {
+        output.error = '沒有 token 或者 token 不合法';
+    }
+
+    const sql = "UPDATE `members` SET ? WHERE id=?";
+    const [r] = await db.query(sql, [req.body, req.myAuth.id]);
     res.json(r);
 });
+
+
 
 
 // *** 路由定義結束 :END
