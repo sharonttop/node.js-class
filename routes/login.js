@@ -236,7 +236,9 @@ router.put('/password-change', async (req, res)=>{
         let result;//在外面使用時，一定要加
         try {
 
-            [result] = await db.query(sql,[hash,req.myAuth.id],function(err, rows){
+            [result] = await db.query(sql,[hash,r[0].id],function(err, rows){
+                //r[0].id從上面req.myAuth.id取值
+                //用於除錯
                 if (err) {
                  console.log(err,'err');
                }else{
