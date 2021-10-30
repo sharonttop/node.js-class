@@ -161,41 +161,41 @@ router.get('/get-data-jwt',async (req, res)=>{
     res.json(output);
 });
 //變更密碼-----------------------
-router.get('/password-change', async (req, res)=>{
-    const output = {
-        success: false,
-        postData: req.body,
-        error: ''
-    };
-    //檢查有無登入
-    if(req.myAuth && req.myAuth.id){
-        output.member = req.myAuth;
-        output.success = true;
-        // output.member = {id, email, nickname};
+// router.get('/password-change', async (req, res)=>{
+//     const output = {
+//         success: false,
+//         postData: req.body,
+//         error: ''
+//     };
+//     //檢查有無登入
+//     if(req.myAuth && req.myAuth.id){
+//         output.member = req.myAuth;
+//         output.success = true;
+//         // output.member = {id, email, nickname};
 
-    } else {
-        output.error = '沒有 token 或者 token 不合法';
-    }
+//     } else {
+//         output.error = '沒有 token 或者 token 不合法';
+//     }
 
-    const sql = "SELECT * FROM `members` WHERE id=?";
-    const [r] = await db.query(sql, [req.myAuth.id]);
-    res.json(r[0] ? r[0] : {});
+//     const sql = "SELECT * FROM `members` WHERE id=?";
+//     const [r] = await db.query(sql, [req.myAuth.id]);
+//     res.json(r[0] ? r[0] : {});
    
-    //驗證舊密碼
-    const success = await bcrypt.compare(req.myAuth.password, r[0].password);
-    if(success){
-        // const {id, email, nickname} = rs[0];
+//     //驗證舊密碼
+//     const success = await bcrypt.compare(req.myAuth.password, r[0].password);
+//     if(success){
+//         // const {id, email, nickname} = rs[0];
 
-        output.success = true;
-        output.member = {id, email, nickname};
-        output.token = await jwt.sign({id, email, nickname}, process.env.JWT_SECRET);
+//         output.success = true;
+//         output.member = {id, email, nickname};
+//         output.token = await jwt.sign({id, email, nickname}, process.env.JWT_SECRET);
 
-    }else {
-        output.error = '密碼錯誤';
-    }
+//     }else {
+//         output.error = '密碼錯誤';
+//     }
 
-    res.json(output);
-});
+//     res.json(output);
+// });
 
 router.put('/password-change', async (req, res)=>{
     const output = {
@@ -206,39 +206,48 @@ router.put('/password-change', async (req, res)=>{
     //檢查有無登入
     if(req.myAuth && req.myAuth.id){
         output.member = req.myAuth;
-        output.success = true;
-        output.member = {id, email, nickname};
-
     } else {
         output.error = '沒有 token 或者 token 不合法';
     }
 
+    const sql = "SELECT * FROM `members` WHERE id=?";
+    const [r] = await db.query(sql, [req.myAuth.id]);
 
     //驗證舊密碼
+    const success = await bcrypt.compare(req.body.password, r[0].password);
+    console.log('body========================')
+    console.log([req.body.password] )
+    console.log('r[]========================')
+    console.log([r[0].password] )
+    console.log('========================')
+
+    if(success){
+
+        const hash = await bcrypt.hash(req.body.newpassword, 10);
+
+        const sql = "UPDATE `members` SET ? WHERE id=?";
     
-
-    //新增密碼----------
-    const hash = await bcrypt.hash(req.myAuth.newpassword, 10);
-
-    const sql = "UPDATE `members` SET ? WHERE id=?";
-
-    // const sql = "UPDATE `members`"+
-    // "(`password`,`create_at`)" + "VALUES (?, NOW())";
-
-    let result;//在外面使用時，一定要加
-    try {
-        [result] = await db.query(sql, [req.body,
-            hash,// 注意hash加密
-        ]);
-
-        if(result.affectedRows===1){
-            output.success = true;
-        } else {
-            output.error = '密碼變更失敗';
+        // const sql = "UPDATE `members`"+
+        // "(`password`,`create_at`)" + "VALUES (?, NOW())";
+    
+        let result;//在外面使用時，一定要加
+        try {
+            [result] = await db.query(sql, [req.body,
+                hash,// 注意hash加密
+            ]);
+    
+            if(result.affectedRows===1){
+                output.success = true;
+            } else {
+                output.error = '密碼變更失敗';
+            }
+        } catch(ex){
+            console.log(ex);
+            output.error = '';
         }
-    } catch(ex){
-        console.log(ex);
-        output.error = '';
+
+    }else {
+        output.error = '密碼錯誤';
     }
 
     res.json(output);
