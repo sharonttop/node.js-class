@@ -215,13 +215,13 @@ router.put('/password-change', async (req, res)=>{
 
     //驗證舊密碼
     const success = await bcrypt.compare(req.body.oldpassword, r[0].password);
-    console.log('body========================')
-    console.log(success)
-    console.log('body========================')
-    console.log([req.body.password] )
-    console.log('r[]========================')
-    console.log([r[0].password] )
-    console.log('========================')
+    // console.log('body========================')
+    // console.log(success)
+    // console.log('body========================')
+    // console.log([req.body.password] )
+    // console.log('r[]========================')
+    // console.log([r[0].password] )
+    // console.log('========================')
 
 
     if(success){
@@ -229,17 +229,22 @@ router.put('/password-change', async (req, res)=>{
         const hash = await bcrypt.hash(req.body.password, 10);
 
         const sql = "UPDATE members SET `password`=? WHERE id=?";
-    
+
         // const sql = "UPDATE `members`" + SET +
         // "(`password`)" + "VALUES (?)";
     
         let result;//在外面使用時，一定要加
         try {
 
-            [result] = await db.query(sql, [req.body.password,
-                hash,// 注意hash加密
-            ]);
+            [result] = await db.query(sql,[hash,req.myAuth.id],function(err, rows){
+                if (err) {
+                 console.log(err,'err');
+               }else{
+                 console.log(rows,'rows')
+               }
+             });
 
+             
             console.log([result]);
 
             if(result.affectedRows===1){
