@@ -228,7 +228,7 @@ router.put('/password-change', async (req, res)=>{
 
         const hash = await bcrypt.hash(req.body.password, 10);
 
-        const sql = "UPDATE `members` SET ? WHERE id=?";
+        const sql = "UPDATE members SET `password`=? WHERE id=?";
     
         // const sql = "UPDATE `members`" + SET +
         // "(`password`)" + "VALUES (?)";
@@ -236,10 +236,12 @@ router.put('/password-change', async (req, res)=>{
         let result;//在外面使用時，一定要加
         try {
 
-            [result] = await db.query(sql, [req.body,
+            [result] = await db.query(sql, [req.body.password,
                 hash,// 注意hash加密
             ]);
-    
+
+            console.log([result]);
+
             if(result.affectedRows===1){
                 output.success = true;
             } else {
