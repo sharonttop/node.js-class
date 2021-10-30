@@ -218,14 +218,16 @@ router.put('/password-change', async (req, res)=>{
     
 
     //新增密碼----------
-    const hash = await bcrypt.hash(req.body.newpassword, 10);
+    const hash = await bcrypt.hash(req.myAuth.newpassword, 10);
 
-    const sql = "UPDATE `members`"+
-    "(`password`,`create_at`)" + "VALUES (?, NOW())";
+    const sql = "UPDATE `members` SET ? WHERE id=?";
+
+    // const sql = "UPDATE `members`"+
+    // "(`password`,`create_at`)" + "VALUES (?, NOW())";
 
     let result;//在外面使用時，一定要加
     try {
-        [result] = await db.query(sql, [
+        [result] = await db.query(sql, [req.body,
             hash,// 注意hash加密
         ]);
 
