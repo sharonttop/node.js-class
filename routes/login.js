@@ -214,24 +214,28 @@ router.put('/password-change', async (req, res)=>{
     const [r] = await db.query(sql, [req.myAuth.id]);
 
     //驗證舊密碼
-    const success = await bcrypt.compare(req.body.password, r[0].password);
+    const success = await bcrypt.compare(req.body.oldpassword, r[0].password);
+    console.log('body========================')
+    console.log(success)
     console.log('body========================')
     console.log([req.body.password] )
     console.log('r[]========================')
     console.log([r[0].password] )
     console.log('========================')
 
+
     if(success){
 
-        const hash = await bcrypt.hash(req.body.newpassword, 10);
+        const hash = await bcrypt.hash(req.body.password, 10);
 
         const sql = "UPDATE `members` SET ? WHERE id=?";
     
-        // const sql = "UPDATE `members`"+
-        // "(`password`,`create_at`)" + "VALUES (?, NOW())";
+        // const sql = "UPDATE `members`" + SET +
+        // "(`password`)" + "VALUES (?)";
     
         let result;//在外面使用時，一定要加
         try {
+
             [result] = await db.query(sql, [req.body,
                 hash,// 注意hash加密
             ]);
