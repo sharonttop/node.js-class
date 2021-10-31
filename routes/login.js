@@ -207,7 +207,7 @@ router.put('/password-change', async (req, res)=>{
     if(req.myAuth && req.myAuth.id){
         output.member = req.myAuth;
     } else {
-        output.error = '沒有 token 或者 token 不合法';
+        output.error = '尚未登入:沒有 token 或者 token 不合法';
     }
 
     const sql = "SELECT * FROM `members` WHERE id=?";
@@ -230,8 +230,6 @@ router.put('/password-change', async (req, res)=>{
 
         const sql = "UPDATE members SET `password`=? WHERE id=?";
 
-        // const sql = "UPDATE `members`" + SET +
-        // "(`password`)" + "VALUES (?)";
     
         let result;//在外面使用時，一定要加
         try {
@@ -260,7 +258,7 @@ router.put('/password-change', async (req, res)=>{
         }
 
     }else {
-        output.error = '密碼錯誤';
+        output.error = '原密碼輸入錯誤';
     }
 
     res.json(output);
