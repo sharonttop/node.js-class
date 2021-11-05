@@ -258,7 +258,7 @@ router.put('/password-change', async (req, res)=>{
         }
 
     }else {
-        output.error = '原密碼輸入錯誤';
+        output.error = '舊密碼輸入錯誤';
     }
 
     res.json(output);

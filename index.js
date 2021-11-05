@@ -23,15 +23,6 @@ const app = express();
 
 app.set('view engine','ejs');
 
-const corsOptions = {
-    credentials: true,
-    origin: (origin, cb)=>{
-       console.log(`origin: ${origin}`);
-       cb(null, true);
-    }
-};
-app.use( cors(corsOptions) );
-// app.use(cors());//如果放到後面，必須放在靜態資料夾之前，同樣是use還是會有優先順序的問題。Access-Control-Allow-Origin: *會全開。
 
 app.use(session({
     name:'mySessionID',//可以修改Application的cookie原本的name(原為connect.sid)，也可以不用改
